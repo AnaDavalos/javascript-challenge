@@ -1,71 +1,89 @@
 // from data.js
 var tableData = data;
-// console.log(tableData)
 
-// Get reference to the table body
+// Populating table
 var tbody = d3.select("tbody");
 
-//Loop through data and console.log each ufoSighting
-const buildTable = (data) => {
-    tbody.html("")
+function buildTable(data) {
+  
+  tbody.html("");
 
-    data.forEach(function (ufoSighting) {
-        // console.log(ufoSighting);
-        //Append one table row "tr" for each ufoSighting objet
-        var row = tbody.append("tr");
+  // Loop and execution using arrow function
+  data.forEach((dataRow) => {
+    // Append a row to the table body
+    var row = tbody.append("tr");
 
-        //Use "Object.entries" to console.log each ufoSighting value
-        Object.values(ufoSighting).forEach(function (value) {
-            // console.log(value);
-            //Append a cell to the row for each value in the ufoSighting report object
-            var cell = row.append("td");
-            //update each cell's text with the ufoSighting values 
-            //(Data, City, State, Country, Shape, Duration, and Comments)
-            cell.text(value);
-        });
-    });
+    // Looping through each cell and appending 
+    Object.values(dataRow).forEach((val) => {
+      var cell = row.append("td");
+        cell.text(val);
+      }
+    );
+  });
 }
 
-//Getting reference to the button on the page with the id property to set to "filter-btn"
-var button = d3.selectAll("#filter-btn");
+function handleClick() {
 
-const handleClick = () => {
-    //select the input element and get the raw HTML node
-    var inputElement = d3.select("#datetime");
+  // From class activity
+  d3.event.preventDefault();
 
-    //Get the value property of the input element
-    var inputValue = inputElement.property("value");
+  // Date tiem from filter
+  var date = d3.select("#datetime").property("value");
+  let filteredData = tableData;
 
-    //console.log the input value
-    // console.log('!!!!!', inputValue);
+  // Check to see if a date was entered and filter the
+  // data using that date.
+  if (date) {
+    // Apply `filter` to the table data to only keep the
+    // rows where the `datetime` value matches the filter value
+    filteredData = filteredData.filter(row => row.datetime === date);
+  }
 
-    //If filter empty - refresh table
-    if (!inputValue) {
-        return buildTable(tableData)
-    }
-
-    //Filter data
-    var filterData = tableData.filter(sighting => sighting.datetime === inputValue);
-    
-    //console.log filter data
-    // console.log(filterData);
-
-    buildTable(filterData)
-
+  // Rebuild the table using the filtered data
+  // @NOTE: If no date was entered, then filteredData will
+  // just be the original tableData.
+  buildTable(filteredData);
 }
 
-button.on("click", handleClick)
+// Attach an event to listen for the form button
+d3.selectAll("#filter-btn").on("click", handleClick);
 
-buildTable(tableData)
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+// Build the table when the page loads
+buildTable(tableData);
+
+
+
+//   var inputfield = d3.select("#datetime").on("input",myFilterFunction);
+//   var button = d3.select("#filter-btn");
+
+// //   function handleClick(){
+// //     console.log(inputfield)
+
+// function myFilterFunction(){
+//     console.log("Hi there!")
+
+
+// }
+
+
+
+
+
+// //   }
+
+//   button.on("click", function() {
+//     console.log(inputfield)
+//   });
+
+  // function handlesubmit() {
+    // Input Date Value
+    // var chosen_date = d3.select("datetime").node().value();
+    // console.log(chosen_date);
+
+    // Button Activation
+
+    // Build Table Filter
+    // var sighting_button = d3.select("")
+
+    // clear the input value
+    // d3.select("datetime").node().value = "";
